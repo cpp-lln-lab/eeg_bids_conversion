@@ -1,34 +1,35 @@
-sub = {'01', '02', '03', '04', '05', '06', '07', '08', '09', '10'};
+function convert_to_bids(cfg)
+%
+% (C) Copyright 2021 Remi Gau
 
-% for subject 3 the age is unknown, for subject 2 the sex is not specified
-age = [11  96  nan 77  82  87  18 40  26  80];
-sex = {'f' [] 'f' 'f' 'f' 'm' 'm' 'm' 'm' 'm'};
-handedness = {'r'};
+sub = cfg.subjects;
 
+nb_subjects = numel(sub);
 
-for subindx=1%:numel(sub)
+for i_sub = 1:numel(nb_subjects)
 
-  cfg = [];
+  this_sub = sub(i_sub);
+  cfg.sub = this_sub.label;
+  this_sub = rmfield(this_sub, 'label');
+
+  cfg.participants = this_sub;
   
+  sub_folder = fullfile(cfg.source_data, cfg.sub);
 
+  run_folders = bids.internal.file_utils('FPList', ...
+                                          sub_folder, ...
+                                          'dir', ...
+                                          ['^' cfg.run_folder_prefix '.*$']);
+  
+  nb_runs = size(run_folders, 1);
+  
+  for i_run = 1:nb_runs
+      datafile = bids.internal.file_utils('FPList', ...
+                                          run_folders(i_run, :), ...
+                                          ['^.*.' cfg.extension '$']);
+      cfg.dataset = datafile;
+      data2bids(cfg);
+  end
 
-  % specify the input file name, here we are using the same file for every subject
-  cfg.dataset   = fullfile(pwd, 'source', 'BB10', 'FPAS2_BB10.vhdr');
-
-  % specify the output directory
-  cfg.bidsroot  = 'bids';
-  cfg.sub       = sub{subindx};
-
-  % specify the information for the participants.tsv file
-  % this is optional, you can also pass other pieces of info
-  cfg.participants.age = age(subindx);
-  cfg.participants.sex = sex{subindx};
-  cfg.participants.handedness = handedness{subindx};
-
-  % specify the information for the scans.tsv file
-  % this is optional, you can also pass other pieces of info
-  cfg.scans.acq_time = datestr(now, 'yyyy-mm-ddThh:MM:SS'); % according to RFC3339
-
-  data2bids(cfg);
 
 end
