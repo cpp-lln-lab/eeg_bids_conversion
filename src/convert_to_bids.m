@@ -2,6 +2,8 @@ function convert_to_bids(cfg)
 %
 % (C) Copyright 2021 Remi Gau
 
+fprintf(1, 'Reading data from %s\n\n', cfg.source_data)
+
 sub = cfg.subjects;
 
 nb_subjects = numel(sub);
@@ -11,6 +13,8 @@ for i_sub = 1:numel(nb_subjects)
   this_sub = sub(i_sub);
   cfg.sub = this_sub.label;
   this_sub = rmfield(this_sub, 'label');
+  
+  fprintf(1, 'Reading data from subject %s\n\n', cfg.sub)
 
   cfg.participants = this_sub;
   

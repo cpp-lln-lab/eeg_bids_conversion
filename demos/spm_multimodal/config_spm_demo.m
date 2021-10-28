@@ -4,7 +4,7 @@ function cfg = config_spm_demo()
  
      working_directory = fileparts(mfilename('fullpath'));
  
-    cfg.subjects(1).label ='EEG';
+    cfg.subjects(1).label ='01';
     cfg.subjects(1).age = 11;
     cfg.subjects(1).sex = 'f';
     cfg.subjects(1).handedness = 'r';

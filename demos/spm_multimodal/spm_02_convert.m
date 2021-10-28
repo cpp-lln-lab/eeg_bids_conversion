@@ -1,5 +1,5 @@
 
-run ../init_env.m
+run ../../init_env.m
 
 cfg = config_spm_demo();
 
