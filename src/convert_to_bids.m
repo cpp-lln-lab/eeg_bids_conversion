@@ -12,9 +12,7 @@ function convert_to_bids(cfg)
 
   participants_folder = participants.source_folder;
 
-  nb_subjects = numel(participants_folder);
-
-  for i_sub = 1:numel(nb_subjects)
+  for i_sub = 1:size(participants_folder, 1)
 
     cfg.sub = get_participant_label(participants, i_sub);
     fprintf(1, 'Reading data from subject %s\n\n', cfg.sub);
@@ -23,22 +21,7 @@ function convert_to_bids(cfg)
 
     sub_input_folder = fullfile(cfg.source_data, participants_folder{i_sub});
 
-    run_folders = bids.internal.file_utils('FPList', ...
-                             sub_input_folder, ...
-                             'dir', ...
-                             ['^' cfg.run_folder_prefix '.*$']);
-
-    nb_runs = size(run_folders, 1);
-
-    for i_run = 1:nb_runs
-      % TODO make sure that runs are converted in the right order
-      datafile = bids.internal.file_utils('FPList', ...
-                            run_folders(i_run, :), ...
-                            ['^.*.' cfg.extension '$']);
-      cfg.run = zero_pad(i_run);
-      cfg.dataset = datafile;
-      data2bids(cfg);
-    end
+    convert_subject(sub_input_folder, cfg);
 
   end
 
@@ -47,10 +30,10 @@ function convert_to_bids(cfg)
   create_data_dictionary(fullfile(cfg.bidsroot, 'participants.tsv'));
 
   BIDS = bids.layout(cfg.bidsroot);
-    events = bids.query(BIDS, 'data', 'suffix', 'events');
-    for i = 1:size(events, 1)
-        create_data_dictionary(events{i})
-    end
+  events = bids.query(BIDS, 'data', 'suffix', 'events');
+  for i = 1:size(events, 1)
+    create_data_dictionary(events{i});
+  end
 
   dashed_line = '\n----------------------------------';
   fprintf(1, dashed_line);
@@ -61,24 +44,87 @@ function convert_to_bids(cfg)
 
 end
 
-function this_participant = extract_participant(participants, index)
-    fields = fieldnames(participants);
-    this_participant = struct();
-    for i_field = 1:numel(fields)
-        this_field = fields{i_field};
-        if ~ismember(this_field, {'label', 'source_folder'})
-            this_participant.(this_field) = participants.(this_field)(index);
+function convert_subject(sub_input_folder, cfg)
+  %
+  % if we find folders with the run prefix we convert them and don't dig deeper
+  % if not we dig one level deeper assuming there is a session level
+  %
+
+  [run_folders, nb_runs] = get_run_folders(sub_input_folder, cfg);
+
+  if nb_runs > 0
+    convert_run_data(run_folders, cfg);
+
+  else
+    ses_folders = bids.internal.file_utils('FPList', sub_input_folder, 'dir', '^.*$');
+
+    if isempty(ses_folders)
+      warning('Found no session or run for subject:\n %s', sub_input_folder);
+
+    else
+
+      ses_folders = cellstr(ses_folders);
+
+      for i = 1:size(ses_folders, 1)
+
+        [run_folders, nb_runs] = get_run_folders(ses_folders{i}, cfg);
+
+        if nb_runs > 0
+          cfg.ses = bids.internal.file_utils(ses_folders{i}, 'basename');
+          convert_run_data(run_folders, cfg);
+        else
+          warning('Found no session or run for subject:\n %s', ses_folders{i});
         end
+      end
+
     end
+
+  end
+
+end
+
+function convert_run_data(run_folders, cfg)
+  run_folders = cellstr(run_folders);
+  for i = 1:size(run_folders, 1)
+    % TODO make sure that runs are converted in the right order
+    datafile = bids.internal.file_utils('FPList', ...
+                                        run_folders{i, :}, ...
+                                        ['^.*.' cfg.extension '$']);
+    cfg.run = zero_pad(i);
+    cfg.dataset = datafile;
+    data2bids(cfg);
+  end
+end
+
+function [run_folders, nb_runs] = get_run_folders(sub_input_folder, cfg)
+
+  run_folders = bids.internal.file_utils('FPList', ...
+                                         sub_input_folder, ...
+                                         'dir', ...
+                                         ['^' cfg.run_folder_prefix '.*$']);
+
+  nb_runs = size(run_folders, 1);
+
+end
+
+function this_participant = extract_participant(participants, index)
+  fields = fieldnames(participants);
+  this_participant = struct();
+  for i_field = 1:numel(fields)
+    this_field = fields{i_field};
+    if ~ismember(this_field, {'label', 'source_folder'})
+      this_participant.(this_field) = participants.(this_field)(index);
+    end
+  end
 end
 
 function label = get_participant_label(participants, index)
-    label = participants.label(index);
-    if ~ischar(label)
-        label = zero_pad(label);
-    end
+  label = participants.label(index);
+  if ~ischar(label)
+    label = zero_pad(label);
+  end
 end
 
 function zero_padded = zero_pad(not_zero_padded)
-    zero_padded = sprintf('%03.0f', not_zero_padded);
+  zero_padded = sprintf('%03.0f', not_zero_padded);
 end

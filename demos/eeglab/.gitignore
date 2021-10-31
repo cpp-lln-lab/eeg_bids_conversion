@@ -1,0 +1,8 @@
+*.set
+
+sourcedata/BB01
+dataset_description.json
+README
+CHANGES
+participants.*
+sub-*

@@ -18,6 +18,8 @@ make install
 
 ### Organize your source data
 
+Example
+
 ```
 sourcedata
 └── subject1
@@ -25,6 +27,26 @@ sourcedata
     │   └── faces_run1.bdf
     └── run2
         └── faces_run2.bdf
+```
+
+**Rules**
+
+- sujbect folder should start with a letter
+- run folders should start with the same prefix (in this case `run`)
+- one datafile per run folder
+- you can have one extra level for sessions (this folder can only include
+  characters and/or numbers)
+
+Example with session level
+
+```
+sourcedata
+└── subject1
+    └──day1
+       ├── run1
+       │   └── faces_run1.bdf
+       └── run2
+           └── faces_run2.bdf
 ```
 
 #### Participant mapping
