@@ -1,5 +1,9 @@
 env
 
+lib/fieldtrip
+
+*.zip
+
 # Windows default autosave extension
 *.asv
 

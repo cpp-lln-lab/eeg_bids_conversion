@@ -6,12 +6,12 @@ function spm_01_download_ds(download_data, clean)
     download_data = false;
   end
   if nargin < 2
-    clean = true;
+    clean = false;
   end
 
   working_directory = fileparts(mfilename('fullpath'));
 
-  subject_dir = '01';
+  subject_dir = 'BB01';
 
   % clean previous runs
   output_dir = fullfile(working_directory, '..', 'sourcedata', subject_dir);

@@ -1,0 +1,24 @@
+octave-workspace
+*.asv
+*.*~
+*.swp
+
+# virtual env
+env/*
+
+# bids-specification repo (necessary for convert_schema.py)
+bids-specification/*
+
+# input and output data involved in tests
+data/*
+derivatives/*
+tests/*.tsv
+
+# coverage
+coverage_html
+
+# styling
+.prettierrc
+
+# visual studio code config
+.vscode/*

@@ -1,4 +1,6 @@
 *.zip
 
-sourcedata/01
-raw
+sourcedata/BB01
+dataset_description.json
+participants.tsv
+sub-*

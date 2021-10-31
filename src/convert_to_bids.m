@@ -4,36 +4,34 @@ function convert_to_bids(cfg)
 
   fprintf(1, 'Reading data from %s\n\n', cfg.source_data);
 
-  % TODO load participants.tsv
+  participants = bids.util.tsvread(cfg.participants_file);
 
-  sub = cfg.subjects;
+  participants_folder = participants.source_folder;
 
-  nb_subjects = numel(sub);
+  nb_subjects = numel(participants_folder);
 
   for i_sub = 1:numel(nb_subjects)
 
-    this_sub = sub(i_sub);
-    cfg.sub = this_sub.label;
-    this_sub = rmfield(this_sub, 'label');
-
+    cfg.sub = get_participant_label(participants, i_sub);
     fprintf(1, 'Reading data from subject %s\n\n', cfg.sub);
 
-    cfg.participants = this_sub;
+    cfg.participants = extract_participant(participants, i_sub);
 
-    sub_folder = fullfile(cfg.source_data, cfg.sub);
+    sub_input_folder = fullfile(cfg.source_data, participants_folder{i_sub});
 
     run_folders = bids.internal.file_utils('FPList', ...
-                                           sub_folder, ...
-                                           'dir', ...
-                                           ['^' cfg.run_folder_prefix '.*$']);
+                             sub_input_folder, ...
+                             'dir', ...
+                             ['^' cfg.run_folder_prefix '.*$']);
 
     nb_runs = size(run_folders, 1);
 
     for i_run = 1:nb_runs
       % TODO make sure that runs are converted in the right order
       datafile = bids.internal.file_utils('FPList', ...
-                                          run_folders(i_run, :), ...
-                                          ['^.*.' cfg.extension '$']);
+                            run_folders(i_run, :), ...
+                            ['^.*.' cfg.extension '$']);
+      cfg.run = zero_pad(i_run);
       cfg.dataset = datafile;
       data2bids(cfg);
     end
@@ -41,8 +39,32 @@ function convert_to_bids(cfg)
   end
 
   dashed_line = '\n----------------------------------';
-  fprintf(1, dashed_line)
-  fprintf(1, '\nRemember to validate your dataset:')
-  fprintf(1, '\nVALIDATOR_URL')
-  fprintf(1, dashed_line)
-  fprintf(1, '\n')
+  fprintf(1, dashed_line);
+  fprintf(1, '\nRemember to validate your dataset:');
+  fprintf(1, '\n https://bids-standard.github.io/bids-validator/');
+  fprintf(1, dashed_line);
+  fprintf(1, '\n');
+
+end
+
+function this_participant = extract_participant(participants, index)
+    fields = fieldnames(participants);
+    this_participant = struct();
+    for i_field = 1:numel(fields)
+        this_field = fields{i_field};
+        if ~ismember(this_field, {'label', 'source_folder'})
+            this_participant.(this_field) = participants.(this_field)(index);
+        end
+    end
+end
+
+function label = get_participant_label(participants, index)
+    label = participants.label(index);
+    if ~ischar(label)
+        label = zero_pad(label);
+    end
+end
+
+function zero_padded = zero_pad(not_zero_padded)
+    zero_padded = sprintf('%03.0f', not_zero_padded);
+end
