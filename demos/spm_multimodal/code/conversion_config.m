@@ -18,19 +18,19 @@ function cfg = conversion_config()
 
   cfg.dataset_description.Name = 'spm multimodal - EEG';
 
-  cfg.method = 'copy';
-  cfg.datatype = 'eeg';
+%   cfg.method = 'copy';
+%   cfg.datatype = 'eeg';
 
-  % specify some general information that will be added to the eeg.json file
-  cfg.InstitutionName = ['Crossmodal perception and plasticity lab,', ...
-                         ' Universite catholique de Louvain'];
-  cfg.InstitutionalDepartmentName = '';
-  cfg.InstitutionAddress = 'Belgium';
+%   % specify some general information that will be added to the eeg.json file
+%   cfg.InstitutionName = ['Crossmodal perception and plasticity lab,', ...
+%                          ' Universite catholique de Louvain'];
+%   cfg.InstitutionalDepartmentName = '';
+%   cfg.InstitutionAddress = 'Belgium';
 
   % provide the mnemonic and long description of the task
   cfg.TaskName = 'facetask';
-  cfg.TaskDescription = ['Subjects were responding as fast as possible '...
-                         'upon a change in a visually presented stimulus.'];
+%   cfg.TaskDescription = ['Subjects were responding as fast as possible '...
+%                          'upon a change in a visually presented stimulus.'];
 
   % these are EEG specific
   cfg.eeg.SoftwareFilters = struct();
