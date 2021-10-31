@@ -14,7 +14,7 @@ function spm_01_download_ds(download_data, clean)
   subject_dir = '01';
 
   % clean previous runs
-  output_dir = fullfile(working_directory, 'sourcedata', subject_dir);
+  output_dir = fullfile(working_directory, '..', 'sourcedata', subject_dir);
 
   if download_data
     dataset_url = 'http://www.fil.ion.ucl.ac.uk/spm/download/data/mmfaces/multimodal_eeg.zip';

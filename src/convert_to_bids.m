@@ -3,7 +3,7 @@ function convert_to_bids(cfg)
   % (C) Copyright 2021 Remi Gau
 
   fprintf(1, 'Reading data from %s\n\n', cfg.source_data);
-  
+
   % TODO load participants.tsv
 
   sub = cfg.subjects;
