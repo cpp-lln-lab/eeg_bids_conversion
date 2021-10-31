@@ -42,6 +42,16 @@ function convert_to_bids(cfg)
 
   end
 
+  % add data dictionary for TSV files
+
+  create_data_dictionary(fullfile(cfg.bidsroot, 'participants.tsv'));
+
+  BIDS = bids.layout(cfg.bidsroot);
+    events = bids.query(BIDS, 'data', 'suffix', 'events');
+    for i = 1:size(events, 1)
+        create_data_dictionary(events{i})
+    end
+
   dashed_line = '\n----------------------------------';
   fprintf(1, dashed_line);
   fprintf(1, '\nRemember to validate your dataset:');

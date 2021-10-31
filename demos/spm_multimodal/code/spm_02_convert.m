@@ -1,5 +1,5 @@
-  %
-  % (C) Copyright 2021 Remi Gau
+%
+% (C) Copyright 2021 Remi Gau
 
 % Adds the code of eeg_bids_conversion
 % you can also simply run the function manually
