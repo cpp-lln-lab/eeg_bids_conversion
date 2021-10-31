@@ -3,18 +3,13 @@ function spm_01_download_ds(download_data, clean)
   % (C) Copyright 2021 Remi Gau
 
   if nargin < 1
-    download_data = false;
+    download_data = true;
   end
   if nargin < 2
-    clean = true;
+    clean = false;
   end
 
   working_directory = fileparts(mfilename('fullpath'));
-
-  subject_dir = '01';
-
-  % clean previous runs
-  output_dir = fullfile(working_directory, '..', 'sourcedata', subject_dir);
 
   if download_data
     dataset_url = 'https://sccn.ucsd.edu/mediawiki/images/9/9c/Eeglab_data.set';
@@ -23,14 +18,13 @@ function spm_01_download_ds(download_data, clean)
     fprintf(1, ' Done\n\n');
   end
 
+  output_dir = fullfile(working_directory, '..', 'sourcedata');
   if clean && exist(output_dir, 'dir')
     rmdir(output_dir, 's');
   end
 
-  fprintf('%-10s:', 'Unzipping dataset...');
-  unzip('multimodal_eeg.zip');
-  movefile('EEG', output_dir);
-  fprintf(1, ' Done\n\n');
+
+  subjects = {'MaBa', 'ReGa', 'CeBa'};
 
   fprintf('%-10s:', 'Reorganize dataset...');
 

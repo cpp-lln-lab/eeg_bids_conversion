@@ -1,22 +1,32 @@
-# eeg_bids_conversion
+# EEG data conversion to BIDS
 
+## Requirements
 
+- MATLAB - version ???? (not tested on Octave)
+- [Fieldtrip](https://github.com/fieldtrip/fieldtrip.git) - version ????
+- bids-matlab is shipped as a library
 
-/home/remi/Dropbox/babyFPAS_rawData/source
+You can install Fieldtrip and update bids-matlab by doing `make install`.
 
-add fieldtrip folder to matlab path
+## Usage
+
+### Organize your source data
 
 ```
-ft_defaults
+sourcedata
+└── subject1
+    ├── run1
+    │   └── faces_run1.bdf
+    └── run2
+        └── faces_run2.bdf
 ```
 
-- create a function to check the cfg structure content
-- task name cannot contain spaces
-- events.json not created
+Create `conversion_config.m` with the configuration details needed for the conversion.
 
+## TODO
 
-
-
-participants.xlsx
-
-source_folder_name  subject_label   age gender handedness ...
+- create a function to check the `cfg` structure content
+- labels cannot contain spaces otherwise we will have
+  `sub-01_task-foo bar_eeg.bdf` and that's just not OK.
+- `events.json` not created
+- `participants.json` not created

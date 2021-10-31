@@ -2,6 +2,10 @@ function convert_to_bids(cfg)
   %
   % (C) Copyright 2021 Remi Gau
 
+  if cfg.init
+    bids.init(cfg.bidsroot);
+  end
+
   fprintf(1, 'Reading data from %s\n\n', cfg.source_data);
 
   participants = bids.util.tsvread(cfg.participants_file);

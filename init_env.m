@@ -1,5 +1,8 @@
 function init_env()
   %
+  % Adds the relevant folders to the matlab path.
+  % Also checks that Fieldtrip is in the path and initializes it.
+  %
   % (C) Copyright 2021 Remi Gau
 
   this_path = fileparts(mfilename('fullpath'));

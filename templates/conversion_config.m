@@ -16,21 +16,18 @@ function cfg = conversion_config()
 
   %% fieldtrip data2bids config
 
-  cfg.dataset_description.Name = 'spm multimodal - EEG';
-
   cfg.method = 'copy';
   cfg.datatype = 'eeg';
 
+  cfg.dataset_description.Name = 'name of my dataset';
   % specify some general information that will be added to the eeg.json file
-  cfg.InstitutionName = ['Crossmodal perception and plasticity lab,', ...
-                         ' Universite catholique de Louvain'];
+  cfg.InstitutionName = [' Universite catholique de Louvain'];
   cfg.InstitutionalDepartmentName = '';
   cfg.InstitutionAddress = 'Belgium';
 
   % provide the mnemonic and long description of the task
-  cfg.TaskName = 'facetask';
-  cfg.TaskDescription = ['Subjects were responding as fast as possible '...
-                         'upon a change in a visually presented stimulus.'];
+  cfg.TaskName = 'nameOfTheTask';
+  cfg.TaskDescription = ['free text descripion'];
 
   % these are EEG specific
   cfg.eeg.SoftwareFilters = struct();
