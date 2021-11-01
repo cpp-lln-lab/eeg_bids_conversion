@@ -16,14 +16,22 @@ function eeglab_01_download_ds(download_data)
   working_directory = fileparts(mfilename('fullpath'));
 
   if download_data
-    dataset_url = 'http://sccn.ucsd.edu/mediawiki/images/9/9c/Eeglab_data.set';
+    dataset_url = 'http://sccn.ucsd.edu/mediawiki/images/9/9c/Eeglab_data.set'; %#ok<CTPCT>
     fprintf('%-10s:', 'Downloading dataset...');
-    urlwrite(dataset_url, 'Eeglab_data.set');
+    try
+      system(['wget ' dataset_url]);
+    catch
+      error(['Could not download the dataset.', ...
+             '\nDownload manually from %s \nin the directory %s.', ...
+             '\nThen run "eeglab_01_download_ds(false)"'], dataset_url, working_directory);
+    end
     fprintf(1, ' Done\n\n');
   end
 
   output_dir = fullfile(working_directory, '..', 'sourcedata');
-  rmdir(output_dir, 's');
+  if exist(output_dir, 'dir')
+    rmdir(output_dir, 's');
+  end
 
   fprintf('%-10s:', 'Reorganize dataset...');
 

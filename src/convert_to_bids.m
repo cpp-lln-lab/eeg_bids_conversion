@@ -9,7 +9,6 @@ function convert_to_bids(cfg)
   fprintf(1, 'Reading data from %s\n\n', cfg.source_data);
 
   participants = bids.util.tsvread(cfg.participants_file);
-
   participants_folder = participants.source_folder;
 
   for i_sub = 1:size(participants_folder, 1)
@@ -25,8 +24,7 @@ function convert_to_bids(cfg)
 
   end
 
-  % add data dictionary for TSV files
-
+  % Add data dictionary for TSV files
   create_data_dictionary(fullfile(cfg.bidsroot, 'participants.tsv'));
 
   BIDS = bids.layout(cfg.bidsroot);
@@ -72,9 +70,12 @@ function convert_subject(sub_input_folder, cfg)
         if nb_runs > 0
           cfg.ses = bids.internal.file_utils(ses_folders{i}, 'basename');
           convert_run_data(run_folders, cfg);
+
         else
           warning('Found no session or run for subject:\n %s', ses_folders{i});
+
         end
+
       end
 
     end
@@ -84,15 +85,23 @@ function convert_subject(sub_input_folder, cfg)
 end
 
 function convert_run_data(run_folders, cfg)
+
   run_folders = cellstr(run_folders);
+
   for i = 1:size(run_folders, 1)
-    % TODO make sure that runs are converted in the right order
+
+    run_name = bids.internal.file_utils(run_folders{i}, 'basename');
+    run_idx = strrep(run_name, cfg.run_folder_prefix, '');
+    run_idx = str2double(run_idx);
+    cfg.run = zero_pad(run_idx);
+
     datafile = bids.internal.file_utils('FPList', ...
-                                        run_folders{i, :}, ...
+                                        run_folders{i}, ...
                                         ['^.*.' cfg.extension '$']);
-    cfg.run = zero_pad(i);
     cfg.dataset = datafile;
+
     data2bids(cfg);
+
   end
 end
 

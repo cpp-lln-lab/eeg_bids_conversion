@@ -2,6 +2,15 @@
 
 Wrapper around FieldTrip `data2bids` to facilitate conversion to BIDS.
 
+- [EEG data conversion to BIDS](#eeg-data-conversion-to-bids)
+  - [Requirements](#requirements)
+  - [Usage](#usage)
+    - [Organize your source data](#organize-your-source-data)
+      - [Participant mapping](#participant-mapping)
+      - [Configuration](#configuration)
+    - [Run the conversion](#run-the-conversion)
+  - [TODO](#todo)
+
 ## Requirements
 
 - MATLAB - version ???? (not tested on Octave)
@@ -16,18 +25,10 @@ make install
 
 ## Usage
 
+Add the proper folder to the Matlab path. Running the `init_env.m` function will
+do this for you and also check that you have Fieldtrip installed.
+
 ### Organize your source data
-
-Example
-
-```
-sourcedata
-└── subject1
-    ├── run1
-    │   └── faces_run1.bdf
-    └── run2
-        └── faces_run2.bdf
-```
 
 **Rules**
 
@@ -37,9 +38,19 @@ sourcedata
 - you can have one extra level for sessions (this folder can only include
   characters and/or numbers)
 
-Example with session level
+<details><summary> <b> Example </b> </font> </summary><br>
+<pre>
+sourcedata
+└── subject1
+    ├── run1
+    │   └── faces_run1.bdf
+    └── run2
+        └── faces_run2.bdf
+</pre>
+</details>
 
-```
+<details><summary> <b> Example with session level </b> </font> </summary><br>
+<pre>
 sourcedata
 └── subject1
     └──day1
@@ -47,7 +58,52 @@ sourcedata
        │   └── faces_run1.bdf
        └── run2
            └── faces_run2.bdf
+</pre>
+</details>
+
+You can use some of bids-matlab function to help you create this folder tree:
 ```
+prfx = 'run';
+subjects = {'BB1', 'sub-02', 'ReGa'};
+sessions = {'day1', 'beh'};
+runs = {[prfx '1'],[prfx '2'], [prfx '5']};
+
+bids.util.mkdir('sourcedata', subjects, sessions, runs);
+```
+
+Will create this.
+
+```
+sourcedata
+├── BB1
+│   ├── beh
+│   │   ├── run1
+│   │   ├── run2
+│   │   └── run5
+│   └── day1
+│       ├── run1
+│       ├── run2
+│       └── run5
+├── ReGa
+│   ├── beh
+│   │   ├── run1
+│   │   ├── run2
+│   │   └── run5
+│   └── day1
+│       ├── run1
+│       ├── run2
+│       └── run5
+└── sub-02
+    ├── beh
+    │   ├── run1
+    │   ├── run2
+    │   └── run5
+    └── day1
+        ├── run1
+        ├── run2
+        └── run5
+```
+
 
 #### Participant mapping
 
