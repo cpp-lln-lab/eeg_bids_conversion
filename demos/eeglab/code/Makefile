@@ -12,7 +12,7 @@ clean:
 	rm -rf ../CHANGES
 
 sourcedata:
-	$(MATLAB) $(ARG) -r "run('eeglab_01_download_ds');exit;"
+	$(MATLAB) $(ARG) -r "run ../../../init_env.m; run('eeglab_01_download_ds');exit;"
 
 bids: sourcedata
 	$(MATLAB) $(ARG) -r "run('eeglab_02_convert.m');exit;"

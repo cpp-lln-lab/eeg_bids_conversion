@@ -3,7 +3,7 @@ function spm_01_download_ds(download_data, clean)
   % (C) Copyright 2021 Remi Gau
 
   if nargin < 1
-    download_data = false;
+    download_data = true;
   end
   if nargin < 2
     clean = false;
