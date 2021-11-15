@@ -141,7 +141,6 @@ conversion. There is a template for this in the `templates` folder.
 init_env()
 cfg = conversion_config();
 convert_to_bids(cfg);
-
 ```
 
 `src/convert_to_bids.m` which is a wrapper function around `data2bids.m` from

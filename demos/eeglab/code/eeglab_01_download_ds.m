@@ -1,7 +1,7 @@
 function eeglab_01_download_ds(download_data)
   %
-  % Creates a dummy EEG source dataset with 3 subjects and random session numbers and
-  % days
+  % Creates a dummy EEG source dataset with 3 subjects
+  % and random session numbers and days
   %
   % (C) Copyright 2021 Remi Gau
 
@@ -9,6 +9,7 @@ function eeglab_01_download_ds(download_data)
     download_data = false;
   end
 
+  % fake subjects name
   subjects = {'MaBa', 'ReGa', 'CeBa'};
   ses_prefix = 'day';
   run_prefix = 'run';
