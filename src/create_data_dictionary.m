@@ -43,6 +43,7 @@ function json_content = add_levels_description(json_content, header, tsv_content
     if iscell(this_level)
       this_level = this_level{1};
     end
+    this_level = bids.internal.camel_case(this_level);
     %         if isnumeric(this_level)
     %             % add a _ because fieldnames cannot be numbers in matlab
     %             this_level = ['' num2str(this_level)];
