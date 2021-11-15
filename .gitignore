@@ -1,8 +1,16 @@
+*.set
+*.eeg
+*.bdf
+*.vhdr
+*.vmrk
+
 env
 
 lib/fieldtrip
 
 *.zip
+
+*.vscode
 
 # Windows default autosave extension
 *.asv
