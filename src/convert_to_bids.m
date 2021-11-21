@@ -29,9 +29,9 @@ function convert_to_bids(cfg)
 
   BIDS = bids.layout(cfg.bidsroot);
   events = bids.query(BIDS, 'data', 'suffix', 'events');
-  for i = 1:size(events, 1)
-    create_data_dictionary(events{i});
-  end
+%   for i = 1:size(events, 1)
+%     create_data_dictionary(events{i});
+%   end
 
   dashed_line = '\n----------------------------------';
   fprintf(1, dashed_line);
