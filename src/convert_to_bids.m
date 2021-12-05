@@ -3,15 +3,23 @@ function convert_to_bids(cfg)
   % (C) Copyright 2021 Remi Gau
 
   if cfg.init
-    bids.init(cfg.bidsroot);
+    bids.init(cfg.bidsroot, ...
+        struct('subjects', {{''}}, 'sessions', {{''}}, 'modalities', {{''}}), ...
+        false, ...
+        cfg.is_datalad_ds);
   end
 
-  fprintf(1, 'Reading data from %s\n\n', cfg.source_data);
+  fprintf(1, '\n\nReading data from %s\n\n', cfg.source_data);
 
   participants = bids.util.tsvread(cfg.participants_file);
   participants_folder = participants.source_folder;
 
   for i_sub = 1:size(participants_folder, 1)
+      
+    if ismember(participants_folder{i_sub}, cfg.subjects_to_skip)
+        warning('\n\nSkipping subject %s\n', participants_folder{i_sub})
+        continue
+    end
 
     cfg.sub = get_participant_label(participants, i_sub);
     fprintf(1, 'Reading data from subject %s\n\n', cfg.sub);
@@ -98,6 +106,11 @@ function convert_run_data(run_folders, cfg)
     datafile = bids.internal.file_utils('FPList', ...
                                         run_folders{i}, ...
                                         ['^.*.' cfg.extension '$']);
+                                    
+    if size(datafile,1) > 1
+        error('too many input files');
+    end
+                                    
     cfg.dataset = datafile;
 
     data2bids(cfg);
