@@ -15,7 +15,7 @@ function convert_to_bids(cfg)
   participants_folder = participants.source_folder;
 
   for i_sub = 1:size(participants_folder, 1)
-      
+
     if ismember(participants_folder{i_sub}, cfg.subjects_to_skip)
         warning('\n\nSkipping subject %s\n', participants_folder{i_sub})
         continue
@@ -106,11 +106,11 @@ function convert_run_data(run_folders, cfg)
     datafile = bids.internal.file_utils('FPList', ...
                                         run_folders{i}, ...
                                         ['^.*.' cfg.extension '$']);
-                                    
+
     if size(datafile,1) > 1
         error('too many input files');
     end
-                                    
+
     cfg.dataset = datafile;
 
     data2bids(cfg);
